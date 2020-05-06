@@ -1,4 +1,5 @@
 import 'package:covid19_info/constant.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -112,9 +113,125 @@ class HomeScreen extends StatelessWidget {
                 ),)
               ],
             ),
-          )
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Caso Atualizado\n",
+                            style: kTitleTextstyle,
+                          ),
+                          TextSpan(
+                            text: "Atualizado em 06 de Março",
+                            style: TextStyle(
+                              color: kTextLightColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    Text(
+                      "Detalhes",
+                      style: TextStyle(
+                        color: kPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 4),
+                        blurRadius: 30,
+                        color: kShadowColor,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Counter(
+                        color: kInfectedColor,
+                        number: 1046,
+                        title: "Infectados",
+                      ),
+                      Counter(
+                        color: kDeathColor,
+                        number: 87,
+                        title: "Mortes",
+                      ),
+                      Counter(
+                        color: kRecovercolor,
+                        number: 46,
+                        title: "Curados",
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class Counter extends StatelessWidget {
+  final int number;
+  final Color color;
+  final String title;
+  const Counter({
+    Key key, this.number, this.color, this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(6),
+          height: 25,
+          width: 25,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color.withOpacity(.26),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+              border: Border.all(
+                color: color,
+                width: 2,
+              )
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+        Text(
+          "$number",
+          style: TextStyle(
+            fontSize: 40,
+            color: color,
+          ),
+        ),
+        Text(title, style: kSubTextStyle),
+      ],
     );
   }
 }
@@ -137,4 +254,4 @@ class MyClipper extends CustomClipper<Path>{
 
 }
 
-/* Start in 5:10m */
+/* Start in 10:38m */
