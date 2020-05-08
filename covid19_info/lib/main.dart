@@ -1,4 +1,6 @@
 import 'package:covid19_info/constant.dart';
+import 'package:covid19_info/widgets/counter.dart';
+import 'package:covid19_info/widgets/my_header.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kBackgroundColor,
         fontFamily: 'Poppins',
         textTheme: TextTheme(
-          body1: TextStyle(color: kBodyTextColor),
+          bodyText2: TextStyle(color: kBodyTextColor),
         )
       ),
       home: HomeScreen(),
@@ -31,55 +33,10 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          ClipPath(
-            clipper: MyClipper(),
-            child: Container(
-              padding: EdgeInsets.only(left: 40, top: 50, right: 20),
-              height: 350,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    Color(0xFF3383CD),
-                    Color(0xFF11249F),
-                  ],
-                ),
-                image: DecorationImage(image: AssetImage('assets/images/virus.png'),
-                )
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: SvgPicture.asset('assets/icons/menu.svg')
-                  ),
-                  SizedBox(height: 20),
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        SvgPicture.asset('assets/icons/Drcorona.svg',
-                          width: 230,
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.topCenter,
-                        ),
-                        Positioned(
-                          top: 20,
-                          left: 150,
-                          child: Text(
-                            "Você apenas precisa \nficar em casa.",
-                            style: kHeadingTextStyle.copyWith(color: Colors.white),
-                          ),
-                        ),
-                        Container() //Por algum motivo o texto não é totalmente renderizado corretamente sem este container extra
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+          MyHeader(
+            image: 'assets/images/virus.png',
+            textTop: "Você precisa apenas",
+            textBottom: "ficar em casa.",
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
@@ -125,7 +82,7 @@ class HomeScreen extends StatelessWidget {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "Caso Atualizado\n",
+                            text: "Casos Atualizados\n",
                             style: kTitleTextstyle,
                           ),
                           TextSpan(
@@ -181,7 +138,45 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      "Avanço do Vírus",
+                      style: kTitleTextstyle,
+                    ),
+                    Text(
+                      "Detalhes",
+                      style: TextStyle(
+                        color: kPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.all(20),
+                  height: 178,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 10),
+                        blurRadius: 30,
+                        color: kShadowColor,
+                      ),
+                    ],
+                  ),
+                  child: Image.asset(
+                    "assets/images/map.png",
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ],
             ),
           ),
@@ -191,67 +186,4 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class Counter extends StatelessWidget {
-  final int number;
-  final Color color;
-  final String title;
-  const Counter({
-    Key key, this.number, this.color, this.title,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(6),
-          height: 25,
-          width: 25,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color.withOpacity(.26),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.transparent,
-              border: Border.all(
-                color: color,
-                width: 2,
-              )
-            ),
-          ),
-        ),
-        SizedBox(height: 10),
-        Text(
-          "$number",
-          style: TextStyle(
-            fontSize: 40,
-            color: color,
-          ),
-        ),
-        Text(title, style: kSubTextStyle),
-      ],
-    );
-  }
-}
-
-class MyClipper extends CustomClipper<Path>{
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(0, size.height - 80);
-    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height - 80);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-
-}
-
-/* Start in 10:38m */
+/* Start in 13:40m */
