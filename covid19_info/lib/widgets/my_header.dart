@@ -1,4 +1,5 @@
 import 'package:covid19_info/constant.dart';
+import 'package:covid19_info/info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -35,7 +36,19 @@ class MyHeader extends StatelessWidget {
           children: <Widget>[
             Align(
               alignment: Alignment.topRight,
-              child: SvgPicture.asset('assets/icons/menu.svg')
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return InfoScreen();
+                      },
+                    )
+                  );
+                },
+                child: SvgPicture.asset('assets/icons/menu.svg')
+              )
             ),
             SizedBox(height: 20),
             Expanded(
@@ -48,10 +61,10 @@ class MyHeader extends StatelessWidget {
                     alignment: Alignment.topCenter,
                   ),
                   Positioned(
-                    top: 20,
+                    top: 30,
                     left: 150,
                     child: Text(
-                      "$textTop \n$textBottom.",
+                      "$textTop \n$textBottom",
                       style: kHeadingTextStyle.copyWith(color: Colors.white),
                     ),
                   ),
