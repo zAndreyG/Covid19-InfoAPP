@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
+  final List<String> dropDownList = ['Brasil', 'Indonésia', 'China', 'Estados Unidos', 'Japão', 'França', 'Itália', 'Argentina', 'Alemanha', 'Mexico'];
+  final List<String> countryList = ['Brazil', 'Indonesia', 'China, USA', 'Japan', 'French', 'Italy', 'Argentina', 'Germany', 'Mexico'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,8 +62,8 @@ class HomeScreen extends StatelessWidget {
                     isExpanded: true,
                     underline: SizedBox(),
                     icon: SvgPicture.asset('assets/icons/dropdown.svg'),
-                    value: 'Indonésia',
-                    items: ['Indonésia', 'China', 'Estados Unidos', 'Japão', 'Brasil']
+                    value: 'Brasil',
+                    items: dropDownList
                       .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
