@@ -9,10 +9,32 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
+  final controller = ScrollController();
+  double offset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(onScroll);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void onScroll() {
+    setState(() {
+      offset = (controller.hasClients) ? controller.offset : 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        controller: controller,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -20,6 +42,7 @@ class _InfoScreenState extends State<InfoScreen> {
               image: "assets/icons/coronadr.svg",
               textTop: "Saiba mais",
               textBottom: "Sobre o Covid-19",
+              offset: offset,
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -30,24 +53,27 @@ class _InfoScreenState extends State<InfoScreen> {
                     "Sintomas",
                     style: kTitleTextstyle,
                   ),
-                  SizedBox(height: 20), 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      SymptomCard(
-                        image: "assets/images/headache.png",
-                        title: "Dor de Cabeça",
-                        isActive: true,
-                      ),
-                      SymptomCard(
-                        image: "assets/images/caugh.png",
-                        title: "Tosse",
-                      ),
-                      SymptomCard(
-                        image: "assets/images/fever.png",
-                        title: "Febre",
-                      ),
-                    ],
+                  SizedBox(height: 20),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        SymptomCard(
+                          image: "assets/images/headache.png",
+                          title: "Dor de Cabeça",
+                          isActive: true,
+                        ),
+                        SymptomCard(
+                          image: "assets/images/caugh.png",
+                          title: "Tosse",
+                        ),
+                        SymptomCard(
+                          image: "assets/images/fever.png",
+                          title: "Febre",
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20),
                   Text("Prevenção", style: kTitleTextstyle),

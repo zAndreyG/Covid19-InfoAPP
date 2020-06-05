@@ -15,9 +15,25 @@ class _StatsScreenState extends State<StatsScreen> {
   final List<String> dropDownList = ['Brasil', 'Indonésia', 'China', 'Estados Unidos', 'Japão', 'França', 'Itália', 'Argentina', 'Alemanha', 'Mexico'];
   final List<String> countryList = ['Brazil', 'Indonesia', 'China, USA', 'Japan', 'French', 'Italy', 'Argentina', 'Germany', 'Mexico'];
 
+  final controller = ScrollController();
+  double offset = 0;
+
   @override
   void initState() {
     super.initState();
+    controller.addListener(onScroll);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void onScroll() {
+    setState(() {
+      offset = (controller.hasClients) ? controller.offset : 0;
+    });
   }
 
   @override
@@ -35,12 +51,14 @@ class _StatsScreenState extends State<StatsScreen> {
       ),
       home: Scaffold(
         body: SingleChildScrollView(
+          controller: controller,
           child: Column(
             children: <Widget>[
               MyHeader(
                 image: 'assets/icons/Drcorona.svg',
-                textTop: "Tudo o que precisa fazer",
-                textBottom: "é ficar em casa.",
+                textTop: "Tudo o que precisa",
+                textBottom: "fazer é se prevenir.",
+                offset: offset,
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
