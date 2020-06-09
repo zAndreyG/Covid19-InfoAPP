@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class StatsScreen extends StatefulWidget {
   @override
   _StatsScreenState createState() => _StatsScreenState();
@@ -93,7 +92,7 @@ class _StatsScreenState extends State<StatsScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -134,9 +133,9 @@ class _StatsScreenState extends State<StatsScreen> {
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                            offset: Offset(0, 4),
-                            blurRadius: 30,
-                            color: kShadowColor,
+                            offset: Offset(0, 10),
+                            blurRadius: 24,
+                            color: kActiveShadowColor,
                           ),
                         ],
                       ),
@@ -161,8 +160,8 @@ class _StatsScreenState extends State<StatsScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Row(
+                    SizedBox(height: 30),
+                    /* Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
@@ -198,7 +197,7 @@ class _StatsScreenState extends State<StatsScreen> {
                         "assets/images/map.png",
                         fit: BoxFit.contain,
                       ),
-                    ),
+                    ), */
                   ],
                 ),
               ),

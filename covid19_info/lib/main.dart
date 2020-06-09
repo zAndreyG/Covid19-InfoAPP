@@ -3,7 +3,6 @@ import 'package:covid19_info/screens/stats_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(Covid19InfoApp());
 }
@@ -15,8 +14,8 @@ class Covid19InfoApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/'    : (context) => StatsScreen(),
-        '/info': (context) => InfoScreen()
+        '/'     : (context) => StatsScreen(),
+        '/info' : (context) => InfoScreen()
       },
     );
   }

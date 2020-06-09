@@ -41,7 +41,7 @@ class _InfoScreenState extends State<InfoScreen> {
             MyHeader(
               image: "assets/icons/coronadr.svg",
               textTop: "Saiba mais",
-              textBottom: "Sobre o Covid-19",
+              textBottom: "sobre o Covid-19",
               offset: offset,
             ),
             Padding(
@@ -54,26 +54,25 @@ class _InfoScreenState extends State<InfoScreen> {
                     style: kTitleTextstyle,
                   ),
                   SizedBox(height: 20),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        SymptomCard(
-                          image: "assets/images/headache.png",
-                          title: "Dor de Cabeça",
-                          isActive: true,
-                        ),
-                        SymptomCard(
-                          image: "assets/images/caugh.png",
-                          title: "Tosse",
-                        ),
-                        SymptomCard(
-                          image: "assets/images/fever.png",
-                          title: "Febre",
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      SymptomCard(
+                        image: "assets/images/headache.png",
+                        title: "Dor de Cabeça",
+                        isActive: true,
+                      ),
+                      SymptomCard(
+                        image: "assets/images/caugh.png",
+                        title: "Tosse",
+                        isActive: true,
+                      ),
+                      SymptomCard(
+                        image: "assets/images/fever.png",
+                        title: "Febre",
+                        isActive: true,
+                      ),
+                    ],
                   ),
                   SizedBox(height: 20),
                   Text("Prevenção", style: kTitleTextstyle),
@@ -82,11 +81,13 @@ class _InfoScreenState extends State<InfoScreen> {
                     image: "assets/images/wear_mask.png",
                     title: "Utilize máscara",
                     text: "Desde o início da pandemia, alguns lugares exigem o uso de máscaras para a circulação em seu interior.",
+                    isActive: true,
                   ),
                   PreventCard(
                     image: "assets/images/wash_hands.png",
                     title: "Lave as mãos",
                     text: "Lavar as mãos com água e sabão, é a sua maior arma contra o coronavírus.",
+                    isActive: true,
                   ),
                   SizedBox(height: 50)
                 ],
@@ -103,8 +104,9 @@ class PreventCard extends StatelessWidget {
   final String image;
   final String title;
   final String text;
+  final bool isActive;
   const PreventCard({
-    Key key, this.image, this.title, this.text,
+    Key key, this.image, this.title, this.text, this.isActive,
   }) : super(key: key);
 
   @override
@@ -123,11 +125,17 @@ class PreventCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
                 boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 8),
+                  isActive
+                  ? BoxShadow(
+                    offset: Offset(0,10),
                     blurRadius: 24,
+                    color: kActiveShadowColor,
+                  )
+                  : BoxShadow(
+                    offset: Offset(0, 3),
+                    blurRadius: 6,
                     color: kShadowColor,
-                  ),
+                    ),
                 ],
               ),
             ),

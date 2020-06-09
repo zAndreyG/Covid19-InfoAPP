@@ -8,8 +8,9 @@ class MyHeader extends StatefulWidget {
   final String textTop;
   final String textBottom;
   final double offset;
+  final bool route;
   const MyHeader({
-    Key key, this.image, this.textTop, this.textBottom, this.offset,
+    Key key, this.image, this.textTop, this.textBottom, this.offset, this.route,
   }) : super(key: key);
 
   @override
@@ -40,19 +41,16 @@ class _MyHeaderState extends State<MyHeader> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
+            ModalRoute.of(context).settings.name == '/'
+            ?InkWell(
+              onTap: () { 
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return InfoScreen();
-                    },
-                  ),
-                );
+                    },),);
               },
               child: SvgPicture.asset('assets/icons/menu.svg')
-            ),
+            )
+            :SizedBox(height: 10),
             SizedBox(height: 20),
             Expanded(
               child: Stack(
@@ -68,7 +66,7 @@ class _MyHeaderState extends State<MyHeader> {
                   ),
                   Positioned(
                     top: 30 - widget.offset / 2,
-                    left: 150,
+                    left: 160,
                     child: Text(
                       "${widget.textTop} \n${widget.textBottom}",
                       style: kHeadingTextStyle.copyWith(color: Colors.white),
