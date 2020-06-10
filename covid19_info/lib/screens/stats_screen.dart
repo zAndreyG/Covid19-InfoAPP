@@ -11,8 +11,9 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  final List<String> dropDownList = ['Brasil', 'Indonésia', 'China', 'Estados Unidos', 'Japão', 'França', 'Itália', 'Argentina', 'Alemanha', 'Mexico'];
-  final List<String> countryList = ['Brazil', 'Indonesia', 'China, USA', 'Japan', 'French', 'Italy', 'Argentina', 'Germany', 'Mexico'];
+  final List<String> dropDownList = ['Global', 'Alemanha', 'Argentina', 'Brasil', 'China', 'Espanha', 'Estados Unidos', 'França', 'India', 'Indonésia', 'Irã', 'Itália', 'Japão', 'Mexico', 'Peru', 'Reino Unido', 'Russia', 'Suíça', 'Turquia'];
+  final List<String> countryList = ['Global', 'Germany', 'Argentina', 'Brazil', 'China', 'Spain', 'United States', 'France', 'India', 'Indonesia', 'Iran', 'Italy', 'Japan', 'Mexico', 'Peru', 'United Kingdom', 'Russia', 'Switzerland' , 'Turkey'];
+  String _dropdownvalue;
 
   final controller = ScrollController();
   double offset = 0;
@@ -75,20 +76,22 @@ class _StatsScreenState extends State<StatsScreen> {
                   children: <Widget>[
                     SvgPicture.asset('assets/icons/maps-and-flags.svg'),
                     SizedBox(width: 20),
-                    Expanded(child: DropdownButton(
-                      isExpanded: true,
-                      underline: SizedBox(),
-                      icon: SvgPicture.asset('assets/icons/dropdown.svg'),
-                      value: 'Brasil',
-                      items: dropDownList
-                        .map<DropdownMenuItem<String>>((String value) {
+                    Expanded(
+                      child: DropdownButton(
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        icon: SvgPicture.asset('assets/icons/dropdown.svg'),
+                        hint: Text('Global'),
+                        value: _dropdownvalue,
+                        onChanged: (value) { setState(() => _dropdownvalue = value); },
+                        items: dropDownList.map<DropdownMenuItem<String>>((String country) {
                           return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                            value: country,
+                            child: Text(country),
                           );
                         }).toList(),
-                        onChanged: (value) {},
-                    ),)
+                      ),
+                    )
                   ],
                 ),
               ),
