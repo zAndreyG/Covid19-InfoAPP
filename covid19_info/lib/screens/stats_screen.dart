@@ -1,8 +1,11 @@
+import 'package:covid19_info/models/stats.dart';
 import 'package:covid19_info/style/constant.dart';
+import 'package:covid19_info/util/requests.dart';
 import 'package:covid19_info/widgets/counter.dart';
 import 'package:covid19_info/widgets/my_header.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class StatsScreen extends StatefulWidget {
@@ -11,9 +14,12 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  final List<String> dropDownList = ['Global', 'Alemanha', 'Argentina', 'Brasil', 'China', 'Espanha', 'Estados Unidos', 'França', 'India', 'Indonésia', 'Irã', 'Itália', 'Japão', 'Mexico', 'Peru', 'Reino Unido', 'Russia', 'Suíça', 'Turquia'];
-  final List<String> countryList = ['Global', 'Germany', 'Argentina', 'Brazil', 'China', 'Spain', 'United States', 'France', 'India', 'Indonesia', 'Iran', 'Italy', 'Japan', 'Mexico', 'Peru', 'United Kingdom', 'Russia', 'Switzerland' , 'Turkey'];
+  final List<String> dropDownList = ['Alemanha', 'Argentina', 'Brasil', 'China', 'Espanha', 'Estados Unidos', 'França', 'India', 'Indonésia', 'Irã', 'Itália', 'Japão', 'Mexico', 'Peru', 'Reino Unido', 'Russia', 'Suíça', 'Turquia'];
+  final List<String> countryList = ['Germany', 'Argentina', 'Brazil', 'China', 'Spain', 'United States', 'France', 'India', 'Indonesia', 'Iran', 'Italy', 'Japan', 'Mexico', 'Peru', 'United Kingdom', 'Russia', 'Switzerland' , 'Turkey'];
   String _dropdownvalue;
+
+  Stats data;
+  bool isSearching = true;
 
   final controller = ScrollController();
   double offset = 0;
@@ -22,6 +28,9 @@ class _StatsScreenState extends State<StatsScreen> {
   void initState() {
     super.initState();
     controller.addListener(onScroll);
+
+    getValue('Brazil');
+    isSearching = false;
   }
 
   @override
@@ -36,13 +45,18 @@ class _StatsScreenState extends State<StatsScreen> {
     });
   }
 
+  getValue(String country) async {
+    isSearching = true;
+    data = await byCountry(country);
+    isSearching = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Covid 19',
       theme: ThemeData(
-        
         scaffoldBackgroundColor: kBackgroundColor,
         fontFamily: 'Poppins',
         textTheme: TextTheme(
@@ -81,7 +95,7 @@ class _StatsScreenState extends State<StatsScreen> {
                         isExpanded: true,
                         underline: SizedBox(),
                         icon: SvgPicture.asset('assets/icons/dropdown.svg'),
-                        hint: Text('Global'),
+                        hint: Text('Brasil'),
                         value: _dropdownvalue,
                         onChanged: (value) { setState(() => _dropdownvalue = value); },
                         items: dropDownList.map<DropdownMenuItem<String>>((String country) {
@@ -142,26 +156,38 @@ class _StatsScreenState extends State<StatsScreen> {
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: data == null
+                      ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: 20),
+                          const SpinKitRing(
+                            color: Colors.blue,
+                            size: 50.0
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      )
+                      : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Counter(
                             color: kInfectedColor,
-                            number: 1046,
+                            number: data.confirmed,
                             title: "Infectados",
                           ),
                           Counter(
                             color: kDeathColor,
-                            number: 87,
+                            number: data.deaths,
                             title: "Mortes",
                           ),
                           Counter(
                             color: kRecovercolor,
-                            number: 46,
+                            number: data.recovered,
                             title: "Curados",
                           ),
                         ],
-                      ),
+                      )
                     ),
                     SizedBox(height: 30),
                     /* Row(
