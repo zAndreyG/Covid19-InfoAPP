@@ -1,5 +1,6 @@
 import 'package:covid19_info/models/stats.dart';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 
 Future<Stats> byCountry(String country) async {
   var dio = Dio();
@@ -12,7 +13,9 @@ Future<Stats> byCountry(String country) async {
       var confirmed = realData['confirmed'];
       var deaths = realData['deaths'];
       var recovered = realData['recovered'];
-      var updated = realData['updated'];
+      var dateUpdated = realData['updated_at'];
+      DateTime date = DateTime.parse(dateUpdated);
+      var updated = DateFormat('dd/MM/yyyy').format(date);
 
       Stats stats = Stats(country, cases, confirmed, deaths, recovered, updated);
       return stats;

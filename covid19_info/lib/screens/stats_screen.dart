@@ -1,3 +1,4 @@
+import 'package:covid19_info/models/country.dart';
 import 'package:covid19_info/models/stats.dart';
 import 'package:covid19_info/style/constant.dart';
 import 'package:covid19_info/util/requests.dart';
@@ -14,23 +15,43 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  final List<String> dropDownList = ['Alemanha', 'Argentina', 'Brasil', 'China', 'Espanha', 'Estados Unidos', 'França', 'India', 'Indonésia', 'Irã', 'Itália', 'Japão', 'Mexico', 'Peru', 'Reino Unido', 'Russia', 'Suíça', 'Turquia'];
-  final List<String> countryList = ['Germany', 'Argentina', 'Brazil', 'China', 'Spain', 'United States', 'France', 'India', 'Indonesia', 'Iran', 'Italy', 'Japan', 'Mexico', 'Peru', 'United Kingdom', 'Russia', 'Switzerland' , 'Turkey'];
-  String _dropdownvalue;
+  static List<Country> countryList = [
+    Country('Brasil', 'Brazil'),
+    Country('Alemanha', 'Germany'),
+    Country('Argentina', 'Argentina'),
+    Country('China', 'China'),
+    Country('Espanha', 'Spain'),
+    Country('Estados Unidos', 'US'),
+    Country('França', 'France'),
+    Country('India', 'India'),
+    Country('Indonésia', 'Indonesia'),
+    Country('Irã', 'Iran'),
+    Country('Itália', 'Italy'),
+    Country('Japão', 'Japan'),
+    Country('México', 'Mexico'),
+    Country('Peru', 'Peru'),
+    Country('Reino Unido', 'United Kingdom'),
+    Country('Russia', 'Russia'),
+    Country('Suíça', 'Switzerland'),
+    Country('Turquia', 'Turkey')
+  ];
+
+  Country _dropdownvalue = countryList[0];
 
   Stats data;
-  bool isSearching = true;
+  bool isSearching = false;
 
   final controller = ScrollController();
   double offset = 0;
+
+  Future<Stats> future;
 
   @override
   void initState() {
     super.initState();
     controller.addListener(onScroll);
 
-    getValue('Brazil');
-    isSearching = false;
+    future = myFuture();
   }
 
   @override
@@ -45,10 +66,9 @@ class _StatsScreenState extends State<StatsScreen> {
     });
   }
 
-  getValue(String country) async {
-    isSearching = true;
-    data = await byCountry(country);
-    isSearching = false;
+  Future<Stats> myFuture() async {
+    data = await byCountry(_dropdownvalue.nameEN);
+    return data;
   }
 
   @override
@@ -95,15 +115,16 @@ class _StatsScreenState extends State<StatsScreen> {
                         isExpanded: true,
                         underline: SizedBox(),
                         icon: SvgPicture.asset('assets/icons/dropdown.svg'),
-                        hint: Text('Brasil'),
+                        hint: Text(countryList[0].namePT),
                         value: _dropdownvalue,
-                        onChanged: (value) { setState(() => _dropdownvalue = value); },
-                        items: dropDownList.map<DropdownMenuItem<String>>((String country) {
-                          return DropdownMenuItem<String>(
+                        onChanged: (value) =>  setState(() {
+                          _dropdownvalue = value;
+                          future = myFuture();
+                          }),
+                        items: countryList.map((country) => DropdownMenuItem<Country>(
                             value: country,
-                            child: Text(country),
-                          );
-                        }).toList(),
+                            child: Text(country.namePT),
+                          )).toList(),
                       ),
                     )
                   ],
@@ -116,21 +137,44 @@ class _StatsScreenState extends State<StatsScreen> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Casos Atualizados\n",
-                                style: kTitleTextstyle,
-                              ),
-                              TextSpan(
-                                text: "Atualizado em 06 de Março",
-                                style: TextStyle(
-                                  color: kTextLightColor,
+                        FutureBuilder<Stats> (
+                          future: future,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting)
+                              return RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Casos Atualizados\n",
+                                      style: kTitleTextstyle,
+                                    ),
+                                    TextSpan(
+                                      text: "Atualizado em ........",
+                                      style: TextStyle(
+                                        color: kTextLightColor,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
+                              );
+                            else
+                            return RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Casos Atualizados\n",
+                                      style: kTitleTextstyle,
+                                    ),
+                                    TextSpan(
+                                      text: "Atualizado em ${data.updated}",
+                                      style: TextStyle(
+                                        color: kTextLightColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                          }
                         ),
                         Spacer(),
                         Text(
@@ -156,37 +200,43 @@ class _StatsScreenState extends State<StatsScreen> {
                           ),
                         ],
                       ),
-                      child: data == null
-                      ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(height: 20),
-                          const SpinKitRing(
-                            color: Colors.blue,
-                            size: 50.0
-                          ),
-                          SizedBox(height: 20),
-                        ],
-                      )
-                      : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Counter(
-                            color: kInfectedColor,
-                            number: data.confirmed,
-                            title: "Infectados",
-                          ),
-                          Counter(
-                            color: kDeathColor,
-                            number: data.deaths,
-                            title: "Mortes",
-                          ),
-                          Counter(
-                            color: kRecovercolor,
-                            number: data.recovered,
-                            title: "Curados",
-                          ),
-                        ],
+                      child: FutureBuilder<Stats>(
+                        future: future,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting)
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(height: 20),
+                                const SpinKitRing(
+                                  color: Colors.blue,
+                                  size: 50.0
+                                ),
+                                SizedBox(height: 20),
+                              ],
+                            );
+                          else
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Counter(
+                                  color: kInfectedColor,
+                                  number: data.confirmed,
+                                  title: "Infectados",
+                                ),
+                                Counter(
+                                  color: kDeathColor,
+                                  number: data.deaths,
+                                  title: "Mortes",
+                                ),
+                                Counter(
+                                  color: kRecovercolor,
+                                  number: data.recovered,
+                                  title: "Curados",
+                                ),
+                              ],
+                            );
+                        }
                       )
                     ),
                     SizedBox(height: 30),
