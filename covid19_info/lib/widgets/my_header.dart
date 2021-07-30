@@ -58,8 +58,19 @@ class _MyHeaderState extends State<MyHeader> {
                         ),
                       );
                     },
-                    child: SvgPicture.asset('assets/icons/menu.svg'))
-                : SizedBox(height: 10),
+                    child: Container(
+                      height: 20,
+                      width: 20,
+                      child: SvgPicture.asset('assets/icons/menu.svg'),
+                    ))
+                : InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                        height: 20,
+                        width: 20,
+                        child: SvgPicture.asset('assets/icons/forward.svg'))),
             SizedBox(height: 20),
             Expanded(
               child: Stack(

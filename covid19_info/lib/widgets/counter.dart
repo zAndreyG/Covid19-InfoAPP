@@ -35,11 +35,14 @@ class Counter extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10),
-        Text(
-          "$number",
-          style: TextStyle(
-            fontSize: 25,
-            color: color,
+        FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Text(
+            "$number",
+            style: TextStyle(
+              fontSize: 25,
+              color: color,
+            ),
           ),
         ),
         Text(title!, style: kSubTextStyle),

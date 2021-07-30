@@ -1,13 +1,11 @@
-import 'package:covid19_info/models/country.dart';
 import 'package:covid19_info/models/stats.dart';
+import 'package:covid19_info/screens/stats_country.dart';
 import 'package:covid19_info/style/constant.dart';
 import 'package:covid19_info/util/requests.dart';
 import 'package:covid19_info/widgets/counter.dart';
 import 'package:covid19_info/widgets/my_header.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class StatsScreen extends StatefulWidget {
@@ -16,27 +14,6 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  static List<Country> countryList = [
-    Country('Brasil', 'Brazil'),
-    Country('Alemanha', 'Germany'),
-    Country('Argentina', 'Argentina'),
-    Country('China', 'China'),
-    Country('Espanha', 'Spain'),
-    Country('Estados Unidos', 'US'),
-    Country('França', 'France'),
-    Country('India', 'India'),
-    Country('Indonésia', 'Indonesia'),
-    Country('Irã', 'Iran'),
-    Country('Itália', 'Italy'),
-    Country('Japão', 'Japan'),
-    Country('México', 'Mexico'),
-    Country('Peru', 'Peru'),
-    Country('Reino Unido', 'United Kingdom'),
-    Country('Russia', 'Russia'),
-    Country('Suíça', 'Switzerland'),
-    Country('Turquia', 'Turkey')
-  ];
-
   final controller = ScrollController();
   double offset = 0;
 
@@ -87,35 +64,39 @@ class _StatsScreenState extends State<StatsScreen> {
                     StatsW data = snapshot.data!;
                     return Column(
                       children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          height: 70,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25),
-                            border: Border.all(
-                              color: Color(0xFFE5E5E5),
+                        InkWell(
+                          onTap: () => Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return StatsCountryScreen();
+                          })),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 20),
+                            height: 70,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(
+                                color: Color(0xFFE5E5E5),
+                              ),
                             ),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(25.0),
-                                child: Image.network(
-                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/1920px-Flag_of_Brazil.svg.png'),
-                              ),
-                              SizedBox(width: 20),
-                              Expanded(
-                                child: Text('Brasil',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center),
-                              ),
-                            ],
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text('Pesquise por país',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center),
+                                ),
+                                Icon(
+                                  Icons.arrow_right_alt_rounded,
+                                  size: 45,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(height: 30),
@@ -130,11 +111,12 @@ class _StatsScreenState extends State<StatsScreen> {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: "Casos Atualizados\n",
+                                          text: "Situação Mundial\n",
                                           style: kTitleTextstyle,
                                         ),
                                         TextSpan(
-                                          text: "Atualizado em Hoje",
+                                          text:
+                                              "Atualizado às ${updatedAt()}hs",
                                           style: TextStyle(
                                             color: kTextLightColor,
                                           ),
@@ -143,30 +125,89 @@ class _StatsScreenState extends State<StatsScreen> {
                                     ),
                                   ),
                                   Spacer(),
-                                  Text(
-                                    "Detalhes",
-                                    style: TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.w600,
+                                  InkWell(
+                                    onTap: () async {
+                                      List<StatsC> countryList =
+                                          await requestCountries();
+                                      countryList.forEach(
+                                          (country) => print(country.country));
+                                    },
+                                    child: Text(
+                                      "Detalhes",
+                                      style: TextStyle(
+                                        color: kPrimaryColor,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                               SizedBox(height: 20),
-                              InfoCard(
-                                  color: kInfectedColor,
-                                  number: data.cases!,
-                                  title: "Infectados"),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: InfoCard(
+                                        color: kInfectedColor,
+                                        number: data.cases!,
+                                        title: "Infectados"),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    child: InfoCard(
+                                        color: kInfectedColor,
+                                        number: data.todayCases!,
+                                        title: "HOJE"),
+                                  ),
+                                ],
+                              ),
                               SizedBox(height: 15),
-                              InfoCard(
-                                  color: kRecovercolor,
-                                  number: data.recovered!,
-                                  title: "Curados"),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: InfoCard(
+                                        color: kRecovercolor,
+                                        number: data.recovered!,
+                                        title: "Curados"),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    child: InfoCard(
+                                        color: kRecovercolor,
+                                        number: data.todayRecovered!,
+                                        title: "HOJE"),
+                                  ),
+                                ],
+                              ),
                               SizedBox(height: 15),
-                              InfoCard(
-                                  color: kDeathColor,
-                                  number: data.deaths!,
-                                  title: "Mortes"),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: InfoCard(
+                                        color: kDeathColor,
+                                        number: data.deaths!,
+                                        title: "Mortes"),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    child: InfoCard(
+                                        color: kDeathColor,
+                                        number: data.todayDeaths!,
+                                        title: "HOJE"),
+                                  ),
+                                ],
+                              ),
                               SizedBox(height: 30),
                             ],
                           ),
@@ -183,6 +224,12 @@ class _StatsScreenState extends State<StatsScreen> {
         ),
       ),
     );
+  }
+
+  String updatedAt() {
+    DateTime now = DateTime.now();
+    String formatDate = DateFormat('HH:mm').format(now);
+    return formatDate;
   }
 }
 
@@ -210,7 +257,6 @@ class _InfoCardState extends State<InfoCard> {
     return InkWell(
       onTap: () => setState(() => noPrecision = !noPrecision),
       child: Container(
-        width: double.infinity,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),

@@ -1,9 +1,9 @@
 class Country {
+  String? iso3Code;
   String? namePT;
-  String? nameEN;
 
-  Country(String namePT, String nameEN) {
+  Country(String iso3Code, String namePT) {
+    this.iso3Code = iso3Code;
     this.namePT = namePT;
-    this.nameEN = nameEN;
   }
 }
