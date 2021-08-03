@@ -1,6 +1,8 @@
 import 'package:covid19_info/models/stats.dart';
 import 'package:covid19_info/style/constant.dart';
 import 'package:covid19_info/util/requests.dart';
+import 'package:covid19_info/widgets/counter.dart';
+import 'package:covid19_info/widgets/countriesButton.dart';
 import 'package:covid19_info/widgets/infoCards.dart';
 import 'package:covid19_info/widgets/my_header.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +48,66 @@ class _StatsScreenState extends State<StatsScreen> {
               textBottom: "e vacine-se!",
               offset: offset,
             ),
+            CountriesButton(),
+            SizedBox(height: 30),
+            Container(
+              height: 500,
+              padding: EdgeInsets.symmetric(horizontal: 23, vertical: 40),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.elliptical(200, 40),
+                  topRight: Radius.elliptical(200, 40),
+                ),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 85,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Counter1(
+                          numberTotal: '16,6m',
+                          numberToday: '223k',
+                          isGood: false,
+                          title: 'INFECTADOS',
+                        ),
+                        Counter1(
+                          numberTotal: '16,6m',
+                          numberToday: '223k',
+                          isGood: true,
+                          title: 'CURADOS',
+                        ),
+                        Counter1(
+                          numberTotal: '16,6m',
+                          numberToday: '223k',
+                          isGood: false,
+                          title: 'MORTOS',
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    height: 150,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.elliptical(200, 60),
+                        topRight: Radius.elliptical(200, 60),
+                        bottomLeft: Radius.circular(25),
+                        bottomRight: Radius.circular(25),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 30),
             FutureBuilder<StatsW>(
               future: requestWorld(),
               builder: (context, snapshot) {
@@ -53,40 +115,6 @@ class _StatsScreenState extends State<StatsScreen> {
                   StatsW data = snapshot.data!;
                   return Column(
                     children: [
-                      InkWell(
-                        onTap: () =>
-                            Navigator.of(context).pushNamed('/countries'),
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                          height: 70,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25),
-                            border: Border.all(
-                              color: Color(0xFFE5E5E5),
-                            ),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Text('Pesquise por país',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center),
-                              ),
-                              Icon(
-                                Icons.arrow_right_alt_rounded,
-                                size: 45,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 30),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(

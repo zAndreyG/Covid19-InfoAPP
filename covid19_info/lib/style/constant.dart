@@ -18,10 +18,10 @@ const kHeadingTextStyle = TextStyle(
   fontWeight: FontWeight.w600,
 );
 
-const kSubTextStyle = TextStyle(fontSize: 16, color: kTextLightColor);
+const kSubTextStyle = TextStyle(fontSize: 15, color: kTextLightColor);
 
 const kTitleTextstyle = TextStyle(
-  fontSize: 18,
+  fontSize: 16,
   color: kTitleTextColor,
   fontWeight: FontWeight.bold,
 );

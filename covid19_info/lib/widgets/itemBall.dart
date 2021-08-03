@@ -9,8 +9,8 @@ class ItemBall extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(6),
-      height: 26,
-      width: 26,
+      height: 15,
+      width: 15,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color.withOpacity(.26),
