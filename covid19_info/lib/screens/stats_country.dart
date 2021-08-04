@@ -1,4 +1,5 @@
 import 'package:covid19_info/models/stats.dart';
+import 'package:covid19_info/style/constant.dart';
 import 'package:covid19_info/util/requests.dart';
 import 'package:covid19_info/widgets/my_header.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _StatsCountryScreenState extends State<StatsCountryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: Colors.grey[50],
         child: Column(
           children: <Widget>[
             MyHeader(
@@ -42,6 +44,21 @@ class _StatsCountryScreenState extends State<StatsCountryScreen> {
               textTop: "Selecione um país",
               textBottom: "para mais detalhes",
               offset: offset,
+            ),
+            RichText(
+              textAlign: TextAlign.left,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "LISTA DE PAÍSES",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: kTitleTextColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
             FutureBuilder<List<StatsC>>(
               future: requestCountries(),
@@ -58,7 +75,7 @@ class _StatsCountryScreenState extends State<StatsCountryScreen> {
                             vertical: 5,
                             horizontal: 15,
                           ),
-                          height: 80,
+                          height: 100,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -71,19 +88,42 @@ class _StatsCountryScreenState extends State<StatsCountryScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                height: 50,
-                                width: 60,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(40.0),
-                                  child: Image.network(
-                                      snapshot.data![index].flag!,
-                                      scale: 2),
+                                height: 60,
+                                width: 80,
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  color: Colors.greenAccent,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Image.network(
+                                  snapshot.data![index].flag!,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              Text(
-                                snapshot.data![index].country!,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              SizedBox(
+                                height: 65,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      snapshot.data![index].country!,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      'Total de casos ${snapshot.data![index].cases!}',
+                                      style: kSubTextStyle,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              CircularProgressIndicator(
+                                value: snapshot.data![index].recovered! /
+                                    snapshot.data![index].cases!,
+                                backgroundColor: Colors.grey[200],
                               )
                             ],
                           ),

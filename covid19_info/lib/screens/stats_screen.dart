@@ -63,31 +63,65 @@ class _StatsScreenState extends State<StatsScreen> {
               ),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 85,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Counter1(
-                          numberTotal: '16,6m',
-                          numberToday: '223k',
-                          isGood: false,
-                          title: 'INFECTADOS',
-                        ),
-                        Counter1(
-                          numberTotal: '16,6m',
-                          numberToday: '223k',
-                          isGood: true,
-                          title: 'CURADOS',
-                        ),
-                        Counter1(
-                          numberTotal: '16,6m',
-                          numberToday: '223k',
-                          isGood: false,
-                          title: 'MORTOS',
-                        )
-                      ],
-                    ),
+                  FutureBuilder<StatsW>(
+                    future: requestWorld(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        StatsW dataW = snapshot.data!;
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: 85,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Counter1(
+                                    numberTotal: NumberFormat.compact()
+                                        .format(dataW.cases),
+                                    numberToday: NumberFormat.compact()
+                                        .format(dataW.todayCases),
+                                    isGood: false,
+                                    title: 'INFECTADOS',
+                                  ),
+                                  Counter1(
+                                    numberTotal: NumberFormat.compact()
+                                        .format(dataW.recovered),
+                                    numberToday: NumberFormat.compact()
+                                        .format(dataW.todayRecovered),
+                                    isGood: true,
+                                    title: 'CURADOS',
+                                  ),
+                                  Counter1(
+                                    numberTotal: NumberFormat.compact()
+                                        .format(dataW.deaths),
+                                    numberToday: NumberFormat.compact()
+                                        .format(dataW.todayDeaths),
+                                    isGood: false,
+                                    title: 'MORTES',
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "Atualizado às ${updatedAt()}hs",
+                                  style: TextStyle(
+                                    color: kTextLightColor,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        );
+                      } else
+                        return CircularProgressIndicator(color: Colors.white);
+                    },
                   ),
                   SizedBox(height: 20),
                   Container(
